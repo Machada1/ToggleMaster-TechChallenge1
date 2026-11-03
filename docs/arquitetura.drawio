@@ -1,0 +1,31 @@
+<mxfile host="app.diagrams.net" modified="2026-10-26T21:18:00.000Z" agent="Mozilla/5.0" version="24.7.17">
+  <diagram id="togglemaster-aws" name="Arquitetura AWS">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="aws" value="Região AWS (us-east-1)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;rounded=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1"><mxGeometry x="40" y="30" width="1450" height="760" as="geometry"/></mxCell>
+        <mxCell id="vpc" value="VPC 10.0.0.0/16" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;rounded=1;fillColor=#e8f0fe;strokeColor=#6c8ebf;" vertex="1" parent="aws"><mxGeometry x="30" y="50" width="1390" height="680" as="geometry"/></mxCell>
+        <mxCell id="igw" value="Internet Gateway" style="shape=mxgraph.aws4.internet_gateway;html=1;fillColor=#f9f9f9;" vertex="1" parent="vpc"><mxGeometry x="40" y="90" width="120" height="80" as="geometry"/></mxCell>
+        <mxCell id="pub" value="Subnet pública 10.0.1.0/24 (AZ a)" style="swimlane;fontStyle=1;startSize=28;rounded=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="vpc"><mxGeometry x="210" y="70" width="530" height="300" as="geometry"/></mxCell>
+        <mxCell id="ec2" value="EC2&#xa;Amazon Linux 2023&#xa;t3.micro&#xa;IP público" style="shape=mxgraph.aws4.ec2;html=1;fillColor=#f9f9f9;" vertex="1" parent="pub"><mxGeometry x="40" y="70" width="150" height="120" as="geometry"/></mxCell>
+        <mxCell id="nginx" value="Nginx :80&#xa;(futuro HTTPS :443)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="pub"><mxGeometry x="240" y="80" width="130" height="65" as="geometry"/></mxCell>
+        <mxCell id="gunicorn" value="Gunicorn :5000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="pub"><mxGeometry x="240" y="190" width="130" height="65" as="geometry"/></mxCell>
+        <mxCell id="priv1" value="Subnet privada 10.0.11.0/24 (AZ a)" style="swimlane;fontStyle=1;startSize=28;rounded=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="vpc"><mxGeometry x="800" y="70" width="270" height="300" as="geometry"/></mxCell>
+        <mxCell id="rds" value="RDS PostgreSQL&#xa;db.t3.micro&#xa;Single-AZ" style="shape=mxgraph.aws4.rds;html=1;fillColor=#f9f9f9;" vertex="1" parent="priv1"><mxGeometry x="55" y="90" width="160" height="120" as="geometry"/></mxCell>
+        <mxCell id="priv2" value="Subnet privada 10.0.12.0/24 (AZ b)" style="swimlane;fontStyle=1;startSize=28;rounded=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="vpc"><mxGeometry x="1100" y="70" width="270" height="300" as="geometry"/></mxCell>
+        <mxCell id="dbsg" value="DB Subnet Group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="priv2"><mxGeometry x="55" y="110" width="160" height="65" as="geometry"/></mxCell>
+        <mxCell id="rtpub" value="Route table pública&#xa;0.0.0.0/0 → IGW" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="vpc"><mxGeometry x="210" y="430" width="240" height="70" as="geometry"/></mxCell>
+        <mxCell id="rtpriv" value="Route tables privadas&#xa;apenas local" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="vpc"><mxGeometry x="800" y="430" width="240" height="70" as="geometry"/></mxCell>
+        <mxCell id="sgapp" value="sg-app&#xa;in: 80/443 0.0.0.0/0&#xa;in: 22 &lt;MEU_IP&gt;/32" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="vpc"><mxGeometry x="210" y="550" width="240" height="90" as="geometry"/></mxCell>
+        <mxCell id="sgdb" value="sg-db&#xa;in: 5432 origem sg-app" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="vpc"><mxGeometry x="800" y="550" width="240" height="90" as="geometry"/></mxCell>
+        <mxCell id="user" value="Usuário / Internet" style="shape=mxgraph.aws4.users;html=1;" vertex="1" parent="1"><mxGeometry x="50" y="350" width="120" height="80" as="geometry"/></mxCell>
+        <mxCell id="e1" value="80/443" edge="1" parent="1" source="user" target="igw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="80" edge="1" parent="1" source="igw" target="ec2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="proxy 5000" edge="1" parent="1" source="nginx" target="gunicorn" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="5432" edge="1" parent="1" source="gunicorn" target="rds" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="" edge="1" parent="1" source="rtpub" target="igw" style="dashed=1;endArrow=none;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="" edge="1" parent="1" source="rtpriv" target="rds" style="dashed=1;endArrow=none;"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

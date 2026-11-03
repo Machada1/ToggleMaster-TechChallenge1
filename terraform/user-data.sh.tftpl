@@ -1,0 +1,30 @@
+#!/bin/bash
+set -euo pipefail
+
+exec > >(tee /var/log/togglemaster-user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
+
+dnf install -y awscli jq
+mkdir -p /opt/togglemaster-source
+if [ ! -d /opt/togglemaster-source/.git ]; then
+  git clone "${repository_url}" /opt/togglemaster-source
+fi
+
+secret="$(aws secretsmanager get-secret-value \
+  --region "${aws_region}" \
+  --secret-id "${secret_arn}" \
+  --query SecretString --output text)"
+password="$(jq -r '.password' <<< "$secret")"
+test -n "$password" && test "$password" != "null"
+
+install -d -m 755 /etc/togglemaster
+cat > /etc/togglemaster/app.env <<'EOF'
+DB_HOST=${db_host}
+DB_NAME=${db_name}
+DB_USER=${db_user}
+EOF
+printf 'DB_PASSWORD=%s\n' "$password" >> /etc/togglemaster/app.env
+chmod 600 /etc/togglemaster/app.env
+chown root:root /etc/togglemaster/app.env
+
+cd /opt/togglemaster-source
+REPO_URL="${repository_url}" bash deploy/bootstrap-ec2.sh

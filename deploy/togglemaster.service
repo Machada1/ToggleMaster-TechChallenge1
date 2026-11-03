@@ -1,0 +1,19 @@
+[Unit]
+Description=ToggleMaster Flask API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=togglemaster
+Group=togglemaster
+WorkingDirectory=/opt/togglemaster
+EnvironmentFile=/etc/togglemaster/app.env
+ExecStart=/opt/togglemaster/venv/bin/gunicorn --bind 127.0.0.1:5000 --workers 2 app:app
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

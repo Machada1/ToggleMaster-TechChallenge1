@@ -1,0 +1,13 @@
+aws_region        = "us-east-1"
+availability_zone_a = "us-east-1a"
+availability_zone_b = "us-east-1b"
+repository_url    = "https://github.com/<USUARIO>/<REPOSITORIO>.git"
+key_name          = "<NOME_DO_KEY_PAIR>"
+admin_cidr        = "<SEU_IP_PUBLICO>/32"
+
+# Opcional. Se omitido, Terraform gera uma senha aleatória.
+# db_password = "nao-coloque-este-arquivo-no-git"
+
+# Para laboratório; em produção, prefira false e um snapshot final.
+skip_final_snapshot = true
+deletion_protection = false
