@@ -18,7 +18,7 @@ Valores entre `<...>` são preenchidos durante a execução. Use a região **us-
 1. Crie `sg-app` na VPC. Inbound: TCP 80 de `0.0.0.0/0`, TCP 443 de `0.0.0.0/0` e TCP 22 somente de `<MEU_IP>/32`. Não abra 5000.
 2. Crie `sg-db` na mesma VPC. Inbound: TCP 5432 com **Source = sg-app** (referência ao security group, não CIDR). Sem acesso público.
 3. Em **RDS > Subnet groups**, crie `togglemaster-db-subnet-group` com a VPC e as duas subnets privadas.
-4. Em **RDS > Databases**, crie PostgreSQL, template compatível com o laboratório/Free Tier, `db.t3.micro`, Single-AZ, banco inicial `togglemaster`, usuário `<DB_USER>`, senha forte temporária e armazenamento gp3 de 20 GiB. Desabilite **Public access** e associe `sg-db`. Aguarde o status `Available` e copie o endpoint privado.
+4. Em **RDS > Databases**, crie PostgreSQL, template compatível com o laboratório/Free Tier, `db.t4g.micro`, Single-AZ, banco inicial `togglemaster`, usuário `<DB_USER>`, senha forte temporária e armazenamento gp2 de 20 GiB. Desabilite **Public access** e associe `sg-db`. Aguarde o status `Available` e copie o endpoint privado.
 
 ## 3. EC2 e instalação
 

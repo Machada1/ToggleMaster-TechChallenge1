@@ -13,7 +13,7 @@ flowchart LR
           EC2 --> NG --> G
         end
         subgraph PRIV1[Subnet privada 10.0.11.0/24 - AZ a]
-          RDS[RDS PostgreSQL<br/>db.t3.micro<br/>Single-AZ]
+          RDS[RDS PostgreSQL<br/>db.t4g.micro<br/>Single-AZ]
         end
         subgraph PRIV2[Subnet privada 10.0.12.0/24 - AZ b]
           DBSG[DB Subnet Group]

@@ -1,17 +1,15 @@
 # Entrega — ToggleMaster Tech Challenge Fase 1
 
-## Participantes
+## Participante
 
-- `<NOME COMPLETO 1> — <RM>`
-- `<NOME COMPLETO 2> — <RM>`
-- `<NOME COMPLETO 3> — <RM>`
+- Guilherme Henrique de Lima Machado — RM não informado
 
 ## Links
 
-- Vídeo (até 15 minutos): `<LINK_DO_VIDEO>`
-- Diagrama draw.io/Mermaid: `<LINK_DO_DIAGRAMA>`
-- Repositório e documentação: `<LINK_DO_REPOSITORIO>`
-- Infraestrutura como código Terraform: [`terraform/`](./terraform/)
+- Repositório e documentação: [Machada1/ToggleMaster-TechChallenge1](https://github.com/Machada1/ToggleMaster-TechChallenge1)
+- Diagrama draw.io: [docs/arquitetura.drawio](./docs/arquitetura.drawio)
+- Diagrama Mermaid: [docs/arquitetura.md](./docs/arquitetura.md)
+- Infraestrutura como código Terraform: [terraform/](./terraform/)
 
 ## Resumo
 
@@ -28,14 +26,20 @@ O ToggleMaster foi implantado como um monolito Flask servido por Gunicorn em uma
 
 ## Desafios encontrados
 
-1. `<DESCREVA o desafio de rede/SG e como foi resolvido>`
-2. `<DESCREVA o desafio de instalação/bootstrap>`
-3. `<DESCREVA o desafio de validação/persistência>`
+1. A primeira execução do bootstrap encontrou a proteção do Git contra o diretório `/opt/togglemaster` com propriedade diferente da identidade executora. A implantação foi regularizada com a configuração explícita de `safe.directory` e a execução administrativa do `git pull`.
+2. O arquivo de ambiente precisou ser corrigido para tratar caracteres especiais da senha do PostgreSQL sem que o shell os interpretasse como comandos. O arquivo final foi protegido com proprietário `root`, grupo `root` e modo `600`.
+3. O RDS foi recriado com o DB Subnet Group privado e o Security Group `secg-db`, cuja porta TCP 5432 aceita tráfego somente do `secg-app`. A conectividade foi comprovada pela EC2 com `psql`.
+4. A tela do AWS Academy não apresentou todas as opções de conectividade no fluxo de criação do PostgreSQL. A configuração final foi validada por AWS CLI e pelos testes da aplicação.
 
 ## Estimativa de custos
 
-Cole aqui o print da AWS Pricing Calculator para `us-east-1`:
+Para a arquitetura observada em `us-east-1`, a estimativa mensal de referência é **US$ 26,18**, antes de impostos, créditos e benefícios do Free Tier/AWS Academy. O detalhamento está em [docs/04-estimativa-custos.md](./docs/04-estimativa-custos.md).
 
-`<INSIRA O PRINT OU LINK DA ESTIMATIVA>`
+Premissas principais:
 
-Total calculado: `<valor>`.
+- EC2 Linux `t3.micro`, 730 horas;
+- EBS gp3 de referência com 12 GiB;
+- RDS PostgreSQL `db.t4g.micro`, Single-AZ, 20 GiB gp2;
+- um IPv4 público;
+- 1 GiB/mês de saída;
+- ausência de NAT Gateway.

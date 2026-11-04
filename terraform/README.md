@@ -9,7 +9,7 @@ Esta pasta provisiona a arquitetura completa do ToggleMaster:
 - route tables privadas sem NAT Gateway, apenas a rota local;
 - `sg-app` com 80/443 públicos e SSH restrito a `admin_cidr`;
 - `sg-db` com 5432 somente a partir do `sg-app`;
-- RDS PostgreSQL 15 `db.t3.micro`, Single-AZ, 20 GiB gp3, sem acesso público;
+- RDS PostgreSQL, Single-AZ, sem acesso público (os valores de classe e armazenamento são parametrizáveis);
 - DB Subnet Group;
 - EC2 Amazon Linux 2023 `t3.micro`, EBS gp3 e Elastic IP;
 - IAM Instance Profile com somente `secretsmanager:GetSecretValue` no segredo específico;
