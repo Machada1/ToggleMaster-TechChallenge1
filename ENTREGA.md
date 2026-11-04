@@ -2,7 +2,7 @@
 
 ## Participante
 
-- Guilherme Henrique de Lima Machado — RM não informado
+- Guilherme Henrique de Lima Machado — RM rm377999
 
 ## Links
 

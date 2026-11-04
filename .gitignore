@@ -6,3 +6,5 @@ terraform/*.tfstate
 terraform/*.tfstate.*
 terraform/tfplan
 terraform/terraform.tfvars
+docs/05-roteiro-video.md
+docs/prompt-relatorio.md
